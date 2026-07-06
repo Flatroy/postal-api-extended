@@ -39,6 +39,15 @@ Rails.application.routes.draw do
   match "/api/v1/manage/domains/:uuid" => "management_api/domains#destroy", via: [:delete]
   match "/api/v1/manage/domains/:uuid/verify" => "management_api/domains#verify", via: [:post]
 
+  match "/api/v1/manage/routes" => "management_api/routes#index", via: [:get]
+  match "/api/v1/manage/routes" => "management_api/routes#create", via: [:post]
+  match "/api/v1/manage/routes/:uuid" => "management_api/routes#show", via: [:get]
+  match "/api/v1/manage/routes/:uuid" => "management_api/routes#update", via: [:patch, :put]
+  match "/api/v1/manage/routes/:uuid" => "management_api/routes#destroy", via: [:delete]
+
+  match "/api/v1/manage/http_endpoints" => "management_api/http_endpoints#index", via: [:get]
+  match "/api/v1/manage/http_endpoints/:uuid" => "management_api/http_endpoints#show", via: [:get]
+
   scope "org/:org_permalink", as: "organization" do
     resources :domains, only: [:index, :new, :create, :destroy] do
       match :verify, on: :member, via: [:get, :post]

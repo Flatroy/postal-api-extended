@@ -10,6 +10,8 @@ Complete API reference for Postal mail server.
 - [Credential Management API](./credentials.md) - Create, read, update, and delete credentials
 - [Organization Management API](./organizations.md) - Create, read, update, and delete organizations
 - [Domain Management API](./domains.md) - Create, read, update, verify, and delete domains
+- [Route Management API](./routes.md) - Create, read, update, and delete routes
+- [HTTP Endpoint Management API](./http_endpoints.md) - List and read HTTP endpoints
 
 ### Legacy Send API (`/api/v1/*`)
 - Send Messages via `/api/v1/send/*`
