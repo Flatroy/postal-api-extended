@@ -17,7 +17,7 @@ require "database_cleaner/active_record" # temporary for testing
 DatabaseCleaner.allow_remote_database_url = true
 ActiveRecord::Base.logger = Logger.new("/dev/null")
 
-Dir[File.expand_path("helpers/**/*.rb", __dir__)].each { |f| require f }
+Dir[File.expand_path("helpers/**/*.rb", __dir__)].reject { |f| f.end_with?("_spec.rb") }.each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
 

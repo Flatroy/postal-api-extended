@@ -40,3 +40,6 @@ doc/api/postman_users_api_collection.json
 doc/api/security_pentest_protocol.md
 doc/api/users_api_test_protocol.md
 doc/readme.md
+
+node_modules
+yarn.lock
