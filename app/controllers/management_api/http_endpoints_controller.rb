@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ManagementAPI
-  class HttpEndpointsController < BaseController
+  class HTTPEndpointsController < BaseController
     def index
       endpoints = scoped_http_endpoints
       endpoints = apply_server_filter(endpoints)

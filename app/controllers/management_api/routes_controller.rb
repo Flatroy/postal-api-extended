@@ -44,11 +44,17 @@ module ManagementAPI
       endpoint = resolve_endpoint_for_create(server)
       return if performed?
 
+      spam_mode = create_spam_mode
+      return if performed?
+
+      mode = endpoint ? "Endpoint" : create_mode
+      return if performed?
+
       route = server.routes.build(
         name: create_name,
         domain: domain,
-        spam_mode: create_spam_mode,
-        mode: endpoint ? "Endpoint" : create_mode
+        spam_mode: spam_mode,
+        mode: mode
       )
       route.endpoint = endpoint if endpoint
 
@@ -108,8 +114,8 @@ module ManagementAPI
       Route.where(server_id: scoped_servers.select(:id))
     end
 
-    def resolve_server
-      server_id = api_params["server_id"]
+    def resolve_server(server_id = nil)
+      server_id ||= api_params["server_id"]
       if server_id.blank?
         render_parameter_error("server_id must be provided")
         return nil
@@ -362,7 +368,7 @@ module ManagementAPI
       server_id = params[:server_id]
       return routes if server_id.blank?
 
-      server = resolve_server
+      server = resolve_server(server_id)
       return routes.none if performed?
 
       routes.where(server_id: server.id)

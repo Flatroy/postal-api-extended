@@ -127,6 +127,14 @@ module ManagementAPI
         .distinct
     end
 
+    def scoped_organizations
+      scoped_organizations_for_current_api_user
+    end
+
+    def scoped_servers
+      Server.present.where(organization_id: scoped_organizations.select(:id))
+    end
+
     def pagination_options
       page = parse_positive_integer_param(params[:page], "page", default: DEFAULT_PAGE)
       return if performed?

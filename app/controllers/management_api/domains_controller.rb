@@ -130,14 +130,6 @@ module ManagementAPI
       nil
     end
 
-    def scoped_organizations
-      scoped_organizations_for_current_api_user
-    end
-
-    def scoped_servers
-      Server.present.where(organization_id: scoped_organizations.select(:id))
-    end
-
     def scoped_domains
       server_domains = Domain.where(owner_type: "Server", owner_id: scoped_servers.select(:id))
       organization_domains = Domain.where(owner_type: "Organization", owner_id: scoped_organizations.select(:id))
@@ -472,6 +464,7 @@ module ManagementAPI
       hash = {
         id: domain.uuid,
         uuid: domain.uuid,
+        internal_id: domain.id,
         name: domain.name,
         scope: domain_scope(domain),
         server_id: domain.owner.is_a?(Server) ? domain.owner_id : nil,

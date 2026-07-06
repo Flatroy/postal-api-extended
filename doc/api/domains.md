@@ -56,6 +56,7 @@ The API returns domain data including scope, DNS expectations, and verification 
 
 Top-level fields include:
 - `id` / `uuid`
+- `internal_id` (Postal's integer primary key; use this as `domain_id` when creating routes)
 - `name`
 - `scope` (`server` or `organization`)
 - `server_id`

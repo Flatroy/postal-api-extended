@@ -52,6 +52,7 @@ RSpec.describe "Management API routes", type: :request do
     end
 
     it "rejects non-admin key owners" do
+      raw_key # force lazy evaluation of the management_api_key let
       admin_user.update!(admin: false)
       get "/api/v1/manage/routes", headers: api_headers
       json = JSON.parse(response.body)
@@ -118,6 +119,7 @@ RSpec.describe "Management API routes", type: :request do
 
   describe "POST /api/v1/manage/routes" do
     it "creates a catch-all route pointing at an HTTP endpoint" do
+      route.destroy!
       expect do
         post "/api/v1/manage/routes",
              params: {
@@ -140,6 +142,7 @@ RSpec.describe "Management API routes", type: :request do
     end
 
     it "defaults the name to a catch-all wildcard when omitted" do
+      route.destroy!
       post "/api/v1/manage/routes",
            params: {
              server_id: server.id,
