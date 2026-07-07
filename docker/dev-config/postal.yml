@@ -1,0 +1,25 @@
+version: 2
+
+postal:
+  web_hostname: postal.test
+  web_protocol: http
+  smtp_hostname: postal.test
+
+main_db:
+  host: mariadb
+  username: root
+  password:
+  database: postal
+
+message_db:
+  host: mariadb
+  username: root
+  prefix: postal
+
+logging:
+  rails_log_enabled: true
+  highlighting_enabled: true
+
+rails:
+  environment: development
+  secret_key: 7f27856d26e864bafd49d0df37ad3d1339086e86ef0447e0f1814dde5277452fea97dab9e3aad6dfa11bfe359c82ce302d97bf1e58f6103c4408e4fbad4eeccf

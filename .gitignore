@@ -43,4 +43,9 @@ doc/readme.md
 
 node_modules
 yarn.lock
+
+# Local-only migration checklist (not for the repo)
 MIGRATION-INSTRUCTIONS.txt
+
+# Local dev config (contains a dev-only signing key)
+docker/dev-config/signing.key

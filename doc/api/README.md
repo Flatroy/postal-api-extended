@@ -138,6 +138,13 @@ Management API list endpoints are paginated with query params:
 | Domains         | `PATCH /api/v1/manage/domains/:uuid`| Update domain              |
 | Domains         | `DELETE /api/v1/manage/domains/:uuid`| Delete domain             |
 | Domains         | `POST /api/v1/manage/domains/:uuid/verify`| Trigger DNS verification |
+| Routes          | `GET /api/v1/manage/routes`        | List routes                |
+| Routes          | `POST /api/v1/manage/routes`       | Create new route           |
+| Routes          | `GET /api/v1/manage/routes/:uuid`  | Get route details          |
+| Routes          | `PATCH /api/v1/manage/routes/:uuid`| Update route               |
+| Routes          | `DELETE /api/v1/manage/routes/:uuid`| Delete route              |
+| HTTP Endpoints  | `GET /api/v1/manage/http_endpoints`        | List HTTP endpoints |
+| HTTP Endpoints  | `GET /api/v1/manage/http_endpoints/:uuid`  | Get HTTP endpoint details |
 | Messages        | `POST /api/v1/send/message`| Send structured email message |
 | Messages        | `POST /api/v1/send/raw`    | Send raw email             |
 | Messages        | `POST /api/v1/messages/message` | Query message details    |

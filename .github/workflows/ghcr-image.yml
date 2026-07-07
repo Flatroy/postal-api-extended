@@ -29,11 +29,14 @@ jobs:
           branch="${GITHUB_REF#refs/heads/}"
           echo "branch=${branch}" >> "$GITHUB_OUTPUT"
 
-          # Build the tag list. Both main and routes-api get :latest
-          # so production can always pull :latest regardless of branch.
+          # Build the tag list. Only routes-api gets :latest so production
+          # can safely pull :latest without risk of getting a main build
+          # that lacks the management API.
           echo 'tags<<EOF' >> "$GITHUB_OUTPUT"
           echo "${image}:${branch}" >> "$GITHUB_OUTPUT"
-          echo "${image}:latest" >> "$GITHUB_OUTPUT"
+          if [ "$branch" = "routes-api" ]; then
+            echo "${image}:latest" >> "$GITHUB_OUTPUT"
+          fi
           echo "${image}:sha-${{ github.sha }}" >> "$GITHUB_OUTPUT"
           echo 'EOF' >> "$GITHUB_OUTPUT"
 
