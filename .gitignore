@@ -43,3 +43,4 @@ doc/readme.md
 
 node_modules
 yarn.lock
+MIGRATION-INSTRUCTIONS.txt
