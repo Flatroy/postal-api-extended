@@ -150,8 +150,17 @@ Supported fields:
 - `incoming`
 - `use_for_any`
 - `rotate_dkim_key` (boolean)
+- `cancel_pending_dkim_key` (boolean)
 
-`rotate_dkim_key=true` generates a new DKIM keypair for the domain.
+`rotate_dkim_key=true` generates a new DKIM keypair for the domain, the same way as the web UI:
+
+- If the current DKIM record is not verified (`dkim_status` is not `OK`), the new key replaces the current key immediately. Publish the new `dns.dkim.expected_value` and verify the domain.
+- If the current DKIM record is verified, the new key is stored as a pending key with a new selector. Postal continues to sign with the current key. The response includes `dns.dkim.pending` (`selector`, `record_name`, `record_type`, `public_key`, `expected_value`). Publish that record in addition to the current one, then call `POST /verify`. When the pending record is found, Postal makes the new key active and `dns.dkim.pending` becomes `null`. Keep the old record published while messages signed with the old key can still be queued, held or redelivered.
+- If a rotation is already pending, the request fails with error code `DKIMRotationInProgress` and nothing changes.
+
+`cancel_pending_dkim_key=true` discards a pending key. The current key stays active.
+
+Sending both `rotate_dkim_key=true` and `cancel_pending_dkim_key=true` returns a `parameter-error`. Key changes are applied only if the other fields are valid.
 
 ---
 

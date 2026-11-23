@@ -69,8 +69,21 @@ module ManagementAPI
       rotate_dkim_key = normalized_optional_boolean(api_params, "rotate_dkim_key")
       return if rotate_dkim_key == :invalid
 
-      if rotate_dkim_key == true
-        domain.generate_dkim_key
+      cancel_pending_dkim_key = normalized_optional_boolean(api_params, "cancel_pending_dkim_key")
+      return if cancel_pending_dkim_key == :invalid
+
+      if rotate_dkim_key == true && cancel_pending_dkim_key == true
+        render_parameter_error("rotate_dkim_key and cancel_pending_dkim_key cannot both be true")
+        return
+      end
+
+      if rotate_dkim_key == true && domain.pending_dkim_key?
+        render_error(
+          "DKIMRotationInProgress",
+          message: "A DKIM key change is already in progress. Publish the pending record and verify the domain, " \
+                   "or cancel the change, before generating another key."
+        )
+        return
       end
 
       attributes = update_attributes
@@ -78,7 +91,15 @@ module ManagementAPI
 
       domain.assign_attributes(attributes)
 
-      if domain.save
+      saved = Domain.transaction do
+        next false unless domain.save
+
+        domain.regenerate_dkim_key! if rotate_dkim_key == true
+        domain.cancel_pending_dkim_key! if cancel_pending_dkim_key == true
+        true
+      end
+
+      if saved
         render_success(
           domain: domain_hash(domain, include_details: true),
           message: "Domain #{domain.name} updated successfully"
@@ -408,7 +429,8 @@ module ManagementAPI
           record_name: [domain.dkim_record_name, domain.name].compact.join("."),
           record_type: "TXT",
           public_key: dkim_public_key,
-          expected_value: domain.dkim_record
+          expected_value: domain.dkim_record,
+          pending: pending_dkim_hash(domain)
         },
         return_path: {
           enabled: true,
@@ -423,6 +445,18 @@ module ManagementAPI
           record_type: "TXT",
           expected_value: "v=DMARC1; p=none"
         }
+      }
+    end
+
+    def pending_dkim_hash(domain)
+      return nil unless domain.pending_dkim_key?
+
+      {
+        selector: domain.pending_dkim_identifier,
+        record_name: "#{domain.pending_dkim_record_name}.#{domain.name}",
+        record_type: "TXT",
+        public_key: domain.pending_dkim_record[/p=([^;]+)/, 1],
+        expected_value: domain.pending_dkim_record
       }
     end
 
