@@ -27,6 +27,7 @@ This document contains all the environment variables which are available for thi
 | `WORKER_DEFAULT_HEALTH_SERVER_PORT` | Integer | The default port for the worker health server to listen on | 9090 |
 | `WORKER_DEFAULT_HEALTH_SERVER_BIND_ADDRESS` | String | The default bind address for the worker health server to listen on | 127.0.0.1 |
 | `WORKER_THREADS` | Integer | The number of threads to execute within each worker | 2 |
+| `WORKER_MINIMUM_PRIORITY` | Integer | The lowest server priority that this worker will send queued messages for | 0 |
 | `MAIN_DB_HOST` | String | Hostname for the main MariaDB server | localhost |
 | `MAIN_DB_PORT` | Integer | The MariaDB port to connect to | 3306 |
 | `MAIN_DB_USERNAME` | String | The MariaDB username | postal |
@@ -43,6 +44,7 @@ This document contains all the environment variables which are available for thi
 | `LOGGING_RAILS_LOG_ENABLED` | Boolean | Enable the default Rails logger | false |
 | `LOGGING_SENTRY_DSN` | String | A DSN which should be used to report exceptions to Sentry |  |
 | `LOGGING_ENABLED` | Boolean | Enable the Postal logger to log to STDOUT | true |
+| `LOGGING_LEVEL` | String | The minimum log level for the Postal logger (debug, info, warn, error, fatal) | INFO |
 | `LOGGING_HIGHLIGHTING_ENABLED` | Boolean | Enable highlighting of log lines | false |
 | `GELF_HOST` | String | GELF-capable host to send logs to |  |
 | `GELF_PORT` | Integer | GELF port to send logs to | 12201 |
@@ -67,6 +69,7 @@ This document contains all the environment variables which are available for thi
 | `DNS_TRACK_DOMAIN` | String | The CNAME which tracking domains should be pointed to | track.postal.example.com |
 | `DNS_HELO_HOSTNAME` | String | The hostname to use in HELO/EHLO when connecting to external SMTP servers |  |
 | `DNS_DKIM_IDENTIFIER` | String | The identifier to use for DKIM keys in DNS records | postal |
+| `DNS_DKIM_KEY_SIZE` | Integer | The size (in bits) of RSA key to generate for DKIM signing (one of 1024, 2048, 3072 or 4096). Note that records for 2048-bit and larger keys exceed 255 characters and must be published as a split (multi-string) TXT record. | 2048 |
 | `DNS_DOMAIN_VERIFY_PREFIX` | String | The prefix to add before TXT record verification string | postal-verification |
 | `DNS_CUSTOM_RETURN_PATH_PREFIX` | String | The domain to use on external domains which points to the Postal return path domain | psrp |
 | `DNS_TIMEOUT` | Integer | The timeout to wait for DNS resolution | 5 |
